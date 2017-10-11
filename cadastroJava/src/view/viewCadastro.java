@@ -5,20 +5,49 @@
  */
 package view;
 
+import javax.swing.table.DefaultTableModel;
 import model.bean.Categoria;
+import model.bean.Produto;
 import model.dao.CategoriaDAO;
+import model.dao.ProdutoDAO;
 
 /**
  *
  * @author Administrador
  */
 public class viewCadastro extends javax.swing.JFrame {
-
+    private DefaultTableModel dtmProdutos;
     /**
      * Creates new form viewCadastro
      */
+    
     public viewCadastro() {
         initComponents();
+        preencherComboBoxCategorias();
+        dtmProdutos = (DefaultTableModel)jTableProdutos.getModel();
+        preencherTabelaProdutos();
+    }
+    
+    private void preencherTabelaProdutos(){
+        ProdutoDAO pDao = new ProdutoDAO();
+        int idProduto = 0;
+        String descProduto = "";
+        int quantidade = 0;
+        double valor = 0.0d;
+        int idCategoria = 0;
+        dtmProdutos.setRowCount(0);//Reseta a tabela (limpa)
+        for(Produto p : pDao.findAll()){
+            idProduto = p.getIdProduto();
+            descProduto = p.getDescricao();
+            quantidade = p.getQtd();
+            valor = p.getValor();
+            
+            //composição
+            idCategoria = p.getCategoria().getIdCategoria();
+            Object[] dados = {idProduto, descProduto, quantidade, valor, idCategoria};
+            dtmProdutos.addRow(dados);
+            
+        }
     }
     private void preencherComboBoxCategorias(){
         CategoriaDAO catDao = new CategoriaDAO();
@@ -52,7 +81,7 @@ public class viewCadastro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro", 0, 0, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 0, 102))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(0, 0, 102))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 102));
@@ -190,8 +219,8 @@ public class viewCadastro extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
